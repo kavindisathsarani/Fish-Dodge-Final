@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fish Dodge: Count to Survive</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%90%9F%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/hud.css">
+<link rel="stylesheet" href="css/screens.css">
+</head>
+<body>
+
+<noscript><p style="padding:24px;color:#fff;font-family:sans-serif">Fish Dodge needs JavaScript to run.</p></noscript>
+<!-- The fish, corals, hearts and rocks are drawn from code by js/art.js and added to the page at start-up. -->
+
+<!-- ══════════════════════ 0  LOADING ══════════════════════ -->
+<section id="splash" class="screen active"><div class="stack" style="gap:20px">
+  <svg class="fish-big"><use href="#fish"/></svg>
+  <h1 class="title" style="font-size:clamp(2rem,5vw,3rem)">Fish Dodge</h1>
+  <div class="loader"><i></i></div>
+  <div style="font-weight:600;color:#e0f2fe">Filling the ocean…</div>
+</div></section>
+
+<!-- ══════════════════════ 1  LOGIN ══════════════════════ -->
+<section id="login" class="screen scene"><div class="stack auth-stack">
+  <div class="brand-hero">
+    <h1 class="logo-wrap"><img class="logo-img" src="assets/logo.webp" alt="Fish Dodge: Count to Survive" width="462" height="265"></h1>
+  </div>
+  <form id="login-form" class="card auth-card" novalidate>
+    <div class="auth-head"><b>Welcome back, diver!</b><span>Log in to continue your ocean adventure</span></div>
+    <label class="flabel" for="l-user">Username</label>
+    <label class="field"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></span><input id="l-user" placeholder="Enter your username" autocomplete="username"></label>
+    <label class="flabel" for="l-pass">Password</label>
+    <div class="pw-wrap field">
+      <span class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+      <input id="l-pass" type="password" placeholder="Enter your password" autocomplete="current-password">
+      <button type="button" class="eye-btn" data-for="l-pass" aria-label="Toggle password visibility"></button>
+    </div>
+    <p class="okmsg" id="l-ok"></p>
+    <p class="err"   id="l-err"></p>
+    <button class="btn cta">Log In</button>
+    <div class="divider-text"><span>new here?</span></div>
+    <button type="button" class="btn outline-btn" data-action="goRegister">Create New Account</button>
+  </form>
+  <div class="chips"><span>🌊 10 levels</span><span>❤️ 3 lives</span><span>🐠 Fish count revive</span></div>
+</div></section>
+
+<!-- ══════════════════════ 2  REGISTER ══════════════════════ -->
+<section id="register" class="screen scene"><div class="stack auth-stack">
+  <div class="brand-hero">
+    <img class="logo-img sm" src="assets/logo.webp" alt="Fish Dodge" width="462" height="265">
+    <h2>Create Account</h2>
+  </div>
+  <form id="register-form" class="card auth-card" novalidate>
+    <div class="auth-head"><b>Join the ocean</b><span>Pick a name and climb the leaderboard</span></div>
+    <label class="field"><span class="ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg></span><input id="r-user" placeholder="Choose a username" autocomplete="username" maxlength="16"></label>
+    <ul class="hints" id="r-user-h"></ul>
+    <div class="pw-wrap field">
+      <span class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+      <input id="r-pass" type="password" placeholder="Create a password" autocomplete="new-password">
+      <button type="button" class="eye-btn" data-for="r-pass" aria-label="Toggle password visibility"></button>
+    </div>
+    <ul class="hints" id="r-pass-h"></ul>
+    <div class="pw-wrap field">
+      <span class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+      <input id="r-pass2" type="password" placeholder="Confirm your password" autocomplete="new-password">
+      <button type="button" class="eye-btn" data-for="r-pass2" aria-label="Toggle password visibility"></button>
+    </div>
+    <ul class="hints" id="r-pass2-h"></ul>
+    <p class="err" id="r-err"></p>
+    <button class="btn cta">Create Account</button>
+    <button type="button" class="btn ghost" data-action="goLogin">← Back to Login</button>
+  </form>
+</div></section>
+
+<!-- ══════════════════════ 3  MAIN MENU ══════════════════════ -->
+<section id="menu" class="screen scene" data-nav="menu">
+  <div class="stack hero">
+    <div class="pill-tag"><i></i><span id="m-welcome">Welcome!</span></div>
+    <h1 class="logo-wrap"><img class="logo-img lg" src="assets/logo.webp" alt="Fish Dodge: Count to Survive" width="462" height="265"></h1>
+    <button class="btn play-btn" data-action="play"><span class="tri">▶</span> Play Now</button>
+    <div class="hint-line">↑ ↓ or W / S to swim &nbsp;·&nbsp; press &amp; drag on touch screens</div>
+    <div class="row menu-row">
+      <button class="btn link-card" data-action="howto"><span class="lc-ico b">📖</span><span class="lc-txt"><b>How to Play</b><small>Rules &amp; scoring</small></span><em>›</em></button>
+      <button class="btn link-card" data-action="leaderboard"><span class="lc-ico y">🏆</span><span class="lc-txt"><b>Leaderboard</b><small>Global high scores</small></span><em>›</em></button>
+    </div>
+    <div class="card panel">
+      <div class="panel-head"><span>📊</span> Your Dive Stats</div>
+      <div class="stats tiles">
+        <div class="stat t-blue"><i>🌊</i>Level<b id="m-level">1/10</b></div>
+        <div class="stat t-gold"><i>⭐</i>Best Score<b id="m-best">0</b></div>
+        <div class="stat t-green"><i>🎮</i>Games<b id="m-games">0</b></div>
+      </div>
+    </div>
+    <!-- Dev mode panel (Shift+D to toggle) -->
+    <div id="dev-level-select" style="display:none;flex-direction:column;gap:8px;width:100%;background:rgba(0,0,0,.45);padding:14px;border-radius:16px;border:2px dashed rgba(250,204,21,.5)">
+      <div style="font-weight:700;color:#facc15;text-align:center;font-size:.95rem">🔧 Dev Mode — Jump to Level</div>
+      <div class="row">
+        <input id="dev-level-input" type="number" min="1" max="10" value="5" style="flex:1">
+        <button class="btn orange" data-action="devPlay" style="flex:none;width:auto;padding:12px 22px">Go →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ 4  LEADERBOARD (GLOBAL + PERSONAL) ══════════════════════ -->
+<section id="leaderboard" class="screen scene" data-nav="leaderboard"><div class="stack wide">
+  <div class="ribbon"><span class="rib-ico">🏆</span><h2>Leaderboard</h2><p>Dive into global competition and claim the underwater crown!</p></div>
+
+  <div class="lb-tabs">
+    <button id="tab-btn-global" class="lb-tab active" data-action="showGlobalLb">🏆 Global Rankings</button>
+    <button id="tab-btn-personal" class="lb-tab" data-action="showPersonalLb">👤 My Best Runs</button>
+  </div>
+
+  <div id="lb-view-global" style="display:flex;flex-direction:column;gap:14px;width:100%">
+    <div id="glb-your-rank" class="your-rank-pill"></div>
+    <div id="glb-podium" class="podium"></div>
+    <div class="card lb-card" style="overflow-x:auto">
+      <div class="panel-head"><span>🐠</span> Top Divers <small id="glb-total"></small></div>
+      <table>
+        <thead><tr><th>Rank</th><th>Player</th><th>Best Score</th><th>Level</th></tr></thead>
+        <tbody id="glb-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="lb-view-personal" style="display:none;flex-direction:column;gap:14px;width:100%">
+    <div class="stats tiles">
+      <div class="stat t-gold"><i>⭐</i>Best Score<b id="lb-best">0</b></div>
+      <div class="stat t-blue"><i>🌊</i>Highest Level<b id="lb-level">0/10</b></div>
+      <div class="stat t-green"><i>🎮</i>Games Played<b id="lb-games">0</b></div>
+    </div>
+    <div class="card lb-card" style="overflow-x:auto">
+      <div class="panel-head"><span>📜</span> My Best Runs</div>
+      <table>
+        <thead><tr><th>Rank</th><th>Date</th><th>Level reached</th><th>Score</th></tr></thead>
+        <tbody id="lb-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row cta-row">
+    <button class="btn play-btn small" data-action="play"><span class="tri">▶</span> Play Now</button>
+    <button class="btn white-btn" data-action="menu">← Main Menu</button>
+  </div>
+</div></section>
+
+<!-- ══════════════════════ 5  HOW TO PLAY ══════════════════════ -->
+<section id="howto" class="screen scene" data-nav="howto"><div class="stack wide guide">
+  <div class="guide-head">
+    <div class="pill-tag"><i></i> Swim Academy · Quick Guide</div>
+    <h2 class="guide-title">How to Play <span>&amp;</span> Scoring</h2>
+    <p>Glide past reef rocks, munch golden pellets and survive with fish-count math!</p>
+    <div class="chips left"><span>❤️ 3 Hearts</span><span>🌊 10 Levels</span></div>
+  </div>
+  <div class="guide-grid">
+    <div class="steps">
+      <div class="step"><div class="step-ico"><span class="k">↑</span><span class="k">↓</span></div>
+        <div><span class="tag">01 · Motion</span><h3>Move Your Fish</h3>
+        <p>Use arrow keys or W / S. On a phone or with a mouse, <b>press and drag</b> on the water - the fish follows your finger.</p></div></div>
+      <div class="step"><div class="step-ico"><svg><use href="#rock"/></svg></div>
+        <div><span class="tag">02 · Evasion</span><h3>Dodge the Rocks</h3>
+        <p>Swim through the gaps. Each level is faster and the gaps get smaller - and from level 4 they drift. Each column earns <b class="c-blue">+25 pts</b>.</p></div></div>
+      <div class="step"><div class="step-ico"><svg><use href="#pellets"/></svg></div>
+        <div><span class="tag">03 · Feed</span><h3>Collect Fish Food</h3>
+        <p>Glowing pellets earn <b class="c-orange">+50 pts</b> each. Swim close and they drift into your mouth.</p></div></div>
+      <div class="step"><div class="step-ico"><svg><use href="#heart"/></svg></div>
+        <div><span class="tag">04 · Health</span><h3>3 Lives &amp; Checkpoints</h3>
+        <p>A rock hit costs 1 life and glides you back to your last checkpoint.</p></div></div>
+      <div class="step"><div class="step-ico"><svg><use href="#fish"/></svg></div>
+        <div><span class="tag">05 · Instant revive</span><h3>Fish Count Challenge</h3>
+        <p>Lose all 3 lives? Count the fish correctly to earn <b class="c-green">+50 pts</b> and restart with full lives!</p></div></div>
+    </div>
+    <div class="side">
+      <div class="card panel">
+        <div class="panel-head"><span>⭐</span> Scoring Guide</div>
+        <div class="score-line"><span>🪨 Rock column passed</span><b class="pts g">+25 pts</b></div>
+        <div class="score-line"><span>🟡 Fish food collected</span><b class="pts o">+50 pts</b></div>
+        <div class="score-line"><span>🐠 Correct fish count</span><b class="pts b">+50 pts</b></div>
+        <div class="score-line"><span>✅ Level completed</span><b class="pts g">+250 pts</b></div>
+      </div>
+      <div class="card tip"><span>💡</span><div><b>Tip:</b> keep your fish near the centre of the screen - it makes dodging high and low rocks much easier.</div></div>
+    </div>
+  </div>
+  <button class="btn play-btn small wide-btn" data-action="howtoBack">Got it! Let's Play 🎮</button>
+</div></section>
+
+<!-- ══════════════════════ 6  ACCOUNT ══════════════════════ -->
+<section id="account" class="screen scene" data-nav="account"><div class="stack wide">
+  <div class="page-head">
+    <button class="back-btn" data-action="menu" aria-label="Back to menu">←</button>
+    <div><span class="eyebrow">Diver identity</span><h2>Account Center</h2></div>
+  </div>
+  <div class="acct-grid">
+    <div class="card profile">
+      <div class="avatar-ring"><div class="avatar-circle"><svg><use href="#fish"/></svg></div></div>
+      <div class="avatar-name" id="a-user">player</div>
+      <span class="lock-badge">🔒 Username can't be changed</span>
+      <div class="mini-stats">
+        <div><b id="a-lvl">1/10</b><small>Level</small></div>
+        <div><b id="a-best">0</b><small>Best score</small></div>
+        <div><b id="a-games">0</b><small>Games</small></div>
+      </div>
+    </div>
+    <div class="acct-right">
+      <div class="card acct-card">
+        <div class="acct-row"><span class="acct-ico">🔑</span><div><b>Security &amp; Password</b><small>Update your password to keep your account safe</small></div></div>
+        <button class="btn cta" data-action="openPwModal">Update Password</button>
+      </div>
+      <div class="danger-zone">
+        <div class="acct-row"><span class="acct-ico red">⚠️</span><div><b>Danger Zone: Delete Account</b><small>Permanently deletes your account, progress and leaderboard records. <strong>This cannot be undone.</strong></small></div></div>
+        <div style="font-size:.82rem;color:#991b1b;font-weight:600">Type DELETE (all caps) to confirm:</div>
+        <input id="a-del" placeholder="DELETE" autocomplete="off" style="border-color:#fecaca">
+        <p class="err" id="a-del-err"></p>
+        <button class="btn danger-btn" data-action="deleteAccount">Delete My Account</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn white-btn narrow" data-action="menu">← Back to Menu</button>
+</div></section>
+
+<!-- ══════════════════════ PASSWORD MODAL ══════════════════════ -->
+<div id="pw-modal" class="modal-backdrop">
+  <div class="modal-box card">
+    <div style="text-align:center">
+      <div style="font-size:2rem">🔑</div>
+      <h3 style="color:var(--blue);margin-top:2px">Update Password</h3>
+    </div>
+    <form id="pw-modal-form" novalidate style="display:flex;flex-direction:column;gap:12px">
+      <div class="pw-wrap">
+        <input id="pm-cur"  type="password" placeholder="Current password"      autocomplete="current-password">
+        <button type="button" class="eye-btn" data-for="pm-cur" aria-label="Toggle password visibility"></button>
+      </div>
+      <div class="pw-wrap">
+        <input id="pm-new"  type="password" placeholder="New password"           autocomplete="new-password">
+        <button type="button" class="eye-btn" data-for="pm-new" aria-label="Toggle password visibility"></button>
+      </div>
+      <ul class="hints" id="pm-new-h"></ul>
+      <div class="pw-wrap">
+        <input id="pm-new2" type="password" placeholder="Confirm new password"   autocomplete="new-password">
+        <button type="button" class="eye-btn" data-for="pm-new2" aria-label="Toggle password visibility"></button>
+      </div>
+      <ul class="hints" id="pm-new2-h"></ul>
+      <p class="err"   id="pm-err"></p>
+      <p class="okmsg" id="pm-ok"></p>
+      <div class="row" style="margin-top:4px">
+        <button class="btn primary">Update Password</button>
+        <button type="button" class="btn ghost" data-action="closePwModal" style="color:var(--ink);border-color:#cbd5e1;background:#f1f5f9">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ══════════════════════ 7  GAMEPLAY ══════════════════════ -->
+<section id="game" class="screen">
+  <div class="hud">
+    <div class="pill" id="hud-level">Level 1/10</div>
+    <div class="bar"><i id="hud-bar"></i><b id="hud-pct">0%</b></div>
+    <div class="hearts" id="hud-hearts"></div>
+    <div class="pill" id="hud-score">Score: 0</div>
+    <button class="iconbtn" data-action="pause" aria-label="Pause">❚❚</button>
+  </div>
+  <div class="play">
+    <canvas id="canvas"></canvas>
+    <!-- On-screen mobile touchpad controls -->
+    <div class="touchpad">
+      <button id="btn-up"   aria-label="Move up">▲</button>
+      <button id="btn-down" aria-label="Move down">▼</button>
+    </div>
+    <!-- Pause overlay -->
+    <div class="overlay" id="pause-overlay"><div class="card" style="align-items:center;text-align:center">
+      <h3 style="color:var(--blue)">⏸ Paused</h3>
+      <button class="btn green"   data-action="resume">▶ Resume</button>
+      <button class="btn primary" data-action="restart">↺ Restart Level</button>
+      <button class="btn primary" data-action="howtoPause">📖 How to Play</button>
+      <button class="btn primary" data-action="toMenu">🏠 Main Menu</button>
+      <button class="btn ghost"   data-action="quit">Quit to Login</button>
+    </div></div>
+    <!-- Out of lives overlay -->
+    <div class="overlay" id="ol-overlay"><div class="card" style="align-items:center;text-align:center">
+      <h3 style="color:#ef4444">💔 Out of Lives!</h3>
+      <div class="hearts" id="ol-hearts"></div>
+      <div class="lab" style="margin:4px 0">Count the fish to get all 3 lives back and retry!</div>
+      <button class="btn orange" data-action="countfish">🐠 Count the Fish!</button>
+    </div></div>
+  </div>
+  <div class="rotate">📱 Tip: turn your phone sideways for a larger view!</div>
+  <div class="controls">
+    <span class="k">↑</span><span class="k">↓</span>
+    <span>Arrow keys or W / S &nbsp;·&nbsp; Touch canvas to steer &nbsp;·&nbsp; Esc / P = pause</span>
+  </div>
+</section>
+
+<!-- ══════════════════════ 8  FISH COUNT MINI-GAME ══════════════════════ -->
+<section id="fishcount" class="screen"><div class="stack wide">
+  <div class="row" style="align-items:center;justify-content:space-between">
+    <h2>🐠 Count the Fish!</h2>
+    <span class="pillred" id="fc-timer" style="flex:none">60s</span>
+  </div>
+  <div class="card">
+    <div style="font-weight:600;text-align:center">How many fish do you see in this picture?</div>
+    <div class="ph">
+      <span id="fc-msg">Loading picture…</span>
+      <img id="fc-img" alt="Count the fish in this picture" hidden>
+    </div>
+    <div class="row">
+      <input id="fc-input" type="number" min="0" inputmode="numeric" placeholder="Enter number of fish">
+      <button class="btn primary" id="fc-submit" style="flex:none;width:auto;padding:12px 24px">Submit</button>
+    </div>
+    <button class="btn ghost" id="fc-reload" hidden>🔄 Load new picture</button>
+    <div style="display:flex;justify-content:space-between;background:#e0f2fe;padding:10px 14px;border-radius:12px;font-weight:600">
+      <span id="fc-attempt">Challenge 1</span>
+      <span id="fc-score">Score: 0</span>
+    </div>
+  </div>
+</div></section>
+
+<!-- ══════════════════════ 9–11  FEEDBACK ══════════════════════ -->
+<section id="correct" class="screen"><div class="stack">
+  <h2>Correct! 🎉</h2>
+  <div class="card" style="align-items:center;text-align:center">
+    <div style="font-size:3rem">⭐</div>
+    <div class="lab">Points earned</div>
+    <div class="big" style="color:var(--green)">+50 pts</div>
+    <div class="lab" style="margin-top:4px">All 3 lives restored!</div>
+    <div class="hearts" id="co-hearts" style="margin-top:4px"></div>
+  </div>
+  <svg class="fish-big" style="width:170px;height:98px"><use href="#fish"/></svg>
+  <button class="btn green" data-action="restartAfterCorrect">▶ Restart Level</button>
+  <div style="font-size:.88rem;text-align:center;opacity:.8">The level restarts from the beginning with 3 full lives.</div>
+</div></section>
+
+<section id="incorrect" class="screen"><div class="stack">
+  <h2>Not Quite! 😅</h2>
+  <div class="card" style="align-items:center;text-align:center">
+    <div style="font-size:2.5rem">🤔</div>
+    <div class="lab">That wasn't the right count. A new picture is on its way!</div>
+    <div class="lab" style="margin-top:8px">Your lives</div>
+    <div class="hearts" id="in-hearts"></div>
+  </div>
+  <button class="btn orange" data-action="tryAgain">Try Again →</button>
+</div></section>
+
+<section id="timeout" class="screen"><div class="stack">
+  <h2>Time's Up! ⏰</h2>
+  <div class="card" style="align-items:center;text-align:center">
+    <div style="font-size:2.5rem">⏰</div>
+    <div class="lab">Time ran out. Try again with a new picture!</div>
+    <div class="lab" style="margin-top:8px">Your lives</div>
+    <div class="hearts" id="to-hearts"></div>
+  </div>
+  <button class="btn orange" data-action="tryAgain">Try Again →</button>
+</div></section>
+
+<!-- ══════════════════════ 12  LEVEL COMPLETE ══════════════════════ -->
+<section id="levelcomplete" class="screen"><div class="stack">
+  <h2>Level Complete! 🎉</h2>
+  <div class="card" style="align-items:center;text-align:center">
+    <div style="font-size:3rem">🌊</div>
+    <div class="lab">Level cleared</div>
+    <div class="big" style="color:var(--ink);font-size:2rem" id="lc-level">1/10</div>
+    <div class="lab" style="margin-top:8px">Score earned this level</div>
+    <div class="big" style="color:var(--green)" id="lc-score">⭐ +0</div>
+  </div>
+  <svg class="fish-big"><use href="#fish"/></svg>
+  <button class="btn primary" style="border:3px solid rgba(255,255,255,.6)" data-action="nextLevel">Next Level →</button>
+  <button class="btn ghost" data-action="toMenu">🏠 Main Menu</button>
+</div></section>
+
+<!-- ══════════════════════ 13  GAME COMPLETE ══════════════════════ -->
+<section id="gamecomplete" class="screen"><div class="stack">
+  <h2>Game Complete! 🏆</h2>
+  <div class="card" style="align-items:center;text-align:center">
+    <div style="font-size:4rem;animation:fishFloat 2s ease-in-out infinite">🏆</div>
+    <div class="lab" style="font-size:1rem">You've conquered all 10 levels!</div>
+    <div class="lab" style="margin-top:4px">Final Score</div>
+    <div class="big" style="color:var(--blue);font-size:2.6rem" id="gc-score">⭐ 0</div>
+  </div>
+  <button class="btn green"   data-action="playAgain">↺ Play Again</button>
+  <button class="btn primary" data-action="leaderboard">🏆 View Leaderboard</button>
+  <button class="btn ghost"   data-action="toMenu">🏠 Main Menu</button>
+</div></section>
+
+<div id="toast"></div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+/* css/hud.css - gameplay screen, HUD bar, canvas, overlays, controls */
+#game {
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: radial-gradient(ellipse at 50% 25%, #0369a1 0%, #075985 35%, #082f49 70%, #031525 100%) !important;
+  position: relative;
+}
+#game::before,
+#game::after {
+  display: none !important;
+}
+
+.hud {
+  width: min(100%, 1100px);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.hud .pill {
+  white-space: nowrap;
+}
+
+.bar {
+  flex: 1;
+  height: 24px;
+  background: rgba(12, 74, 110, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.bar i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0%;
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+  transition: width 0.15s ease-out;
+}
+.bar b {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.hud .hearts svg {
+  width: 28px;
+  height: 26px;
+}
+
+.iconbtn {
+  background: rgba(12, 74, 110, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 12px;
+  color: #fff;
+  font: 700 1rem inherit;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.iconbtn:hover {
+  background: rgba(12, 74, 110, 0.95);
+}
+
+.play {
+  position: relative;
+  width: min(100%, calc((100vh - 150px) * 16 / 9));
+  max-width: 1100px;
+  touch-action: none;
+}
+#canvas {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  border-radius: 18px;
+  border: 2px solid rgba(56, 189, 248, 0.4);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), 0 0 25px rgba(2, 132, 199, 0.25);
+  touch-action: none;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: rgba(8, 33, 66, 0.75);
+  border-radius: 16px;
+  z-index: 5;
+  backdrop-filter: blur(4px);
+}
+.overlay.on {
+  display: grid;
+}
+.overlay .card {
+  width: min(88%, 340px);
+  align-items: center;
+  text-align: center;
+}
+.overlay h3 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: var(--blue);
+}
+
+.controls {
+  width: min(100%, 1100px);
+  background: rgba(12, 74, 110, 0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 8px 16px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.92rem;
+  backdrop-filter: blur(4px);
+}
+.controls .k {
+  background: #fff;
+  color: #0369a1;
+  box-shadow: none;
+}
+
+.touchpad {
+  display: none;
+}
+.rotate {
+  display: none;
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.9;
+}
+@media (orientation: portrait) and (max-width: 768px) {
+  .rotate { display: block; }
+}
+
+/* Touch controls for mobile / tablet / small screens */
+@media (max-width: 860px), (pointer: coarse) {
+  .touchpad {
+    display: flex;
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .touchpad button {
+    pointer-events: auto;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255, 255, 255, 0.85);
+    background: rgba(2, 132, 199, 0.75);
+    color: #fff;
+    font-size: 1.6rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    display: grid;
+    place-items: center;
+  }
+  .touchpad button:active {
+    background: rgba(3, 105, 161, 0.95);
+    transform: scale(0.94);
+  }
+  .controls {
+    display: none;
+  }
+}
+
+/* Compact responsive HUD for mobile */
+@media (max-width: 768px) {
+  #game {
+    padding: 8px 6px;
+    gap: 8px;
+  }
+  .hud {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+  }
+  .hud .pill {
+    padding: 5px 10px;
+    font-size: 0.82rem;
+  }
+  .hud .hearts svg {
+    width: 22px;
+    height: 20px;
+  }
+  .bar {
+    grid-column: 1 / -1;
+    order: 10;
+    height: 18px;
+  }
+}
