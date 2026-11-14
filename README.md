@@ -83,5 +83,3 @@ It receives an image URL and solution count. The raw response is printed in DevT
 - New logo `assets/logo.webp` on sign-in, register and home.
 - Frosted-glass cards, glossy pill buttons, glass frame around the game canvas. All game logic, ids and data-actions unchanged.
 
-## Leaderboard fix (new players missing)
-Run `supabase/fix_new_players.sql` once in the Supabase SQL editor (it adds a trigger that creates the profile and progress rows for every new account, repairs existing players, and makes the leaderboard resilient). Also turn off Authentication > Providers > Email > "Confirm email".
