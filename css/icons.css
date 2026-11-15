@@ -1,0 +1,34 @@
+/* css/icons.css - sizing and colours for the inline SVG icons that replace the emoji.
+   Icons scale with the text around them (1em) and take its colour (currentColor). */
+.ic {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  vertical-align: -0.15em;
+  flex: none;
+  overflow: visible;
+}
+.ic.fish { width: 1.7em; }
+
+/* colour hints where the icon sits on its own */
+.ic.star { color: #f5b301; }
+.tone-gold { color: #f5b301; }
+.tone-blue { color: #0284c7; }
+.tone-red  { color: #ef4444; }
+
+/* medals for the top three players */
+.ic.medal { width: 1.3em; height: 1.3em; }
+.ic.medal.m1 { color: #facc15; }
+.ic.medal.m2 { color: #cbd5e1; }
+.ic.medal.m3 { color: #d97706; }
+
+/* stat tiles, ribbon and link cards */
+.stat.t-blue .ic  { color: #0284c7; }
+.stat.t-gold .ic  { color: #f5b301; }
+.stat.t-green .ic { color: #16a34a; }
+.rib-ico .ic { color: #facc15; }
+.lc-ico .ic { width: 1.1em; height: 1.1em; }
+.tri .ic { width: .9em; height: .9em; vertical-align: -.1em; }
+.step .ic, .tip .ic { color: #f59e0b; }
+.panel-head .ic { color: #0284c7; }
+.acct-ico .ic { width: 1.1em; height: 1.1em; }

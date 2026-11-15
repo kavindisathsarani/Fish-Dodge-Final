@@ -30,6 +30,8 @@ export function renderMenu(user, p) {
   document.querySelectorAll('.nav-user .av').forEach(el => { el.textContent = initial(user.username); });
 }
 
+const STAR = '<svg class="ic star" aria-hidden="true"><use href="#i-star"/></svg> ';
+const medal = i => `<svg class="ic medal m${i + 1}" aria-hidden="true"><use href="#i-medal"/></svg>`;
 const AV_COLORS = [['#38bdf8', '#0284c7'], ['#a78bfa', '#6d28d9'], ['#fb7185', '#e11d48'], ['#34d399', '#059669'], ['#fbbf24', '#d97706'], ['#22d3ee', '#0e7490']];
 const initial = n => (String(n || '?').trim()[0] || '?').toUpperCase();
 function avatar(name) {
@@ -50,23 +52,22 @@ export function renderGlobalLeaderboard(rows, totalPlayers, currentUserId) {
     return;
   }
 
-  const medals = ['🥇', '🥈', '🥉'];
   if (podium) podium.innerHTML = rows.slice(0, 3).map((r, i) => `<div class="pod p${i + 1} ${r.user_id === currentUserId ? 'me' : ''}">
-      <span class="medal">${medals[i]}</span>${avatar(r.username)}
+      <span class="medal">${medal(i)}</span>${avatar(r.username)}
       <div class="nm">${escHtml(r.username)}</div>
-      <div class="sc">⭐ ${Number(r.highest_score).toLocaleString()}</div>
+      <div class="sc">${STAR}${Number(r.highest_score).toLocaleString()}</div>
       <div class="lv">Level ${r.highest_level}/${TOTAL_LEVELS}</div></div>`).join('');
 
   tbody.innerHTML = rows.map((r, i) => {
     const rank = i + 1;
     const isMe = r.user_id === currentUserId;
-    const medal = rank <= 3 ? medals[rank - 1] : '';
+    const medalIcon = rank <= 3 ? medal(rank - 1) : '';
     const topCls = rank === 1 ? 'rank-gold' : rank === 2 ? 'rank-silver' : rank === 3 ? 'rank-bronze' : '';
     const meCls = isMe ? 'rank-me' : '';
     return `<tr class="${topCls} ${meCls}">
-      <td><span class="rank-num">${medal || rank}</span></td>
+      <td><span class="rank-num">${medalIcon || rank}</span></td>
       <td><span class="who">${avatar(r.username)}<span class="lb-username">${escHtml(r.username)}${isMe ? ' <span class="you-badge">YOU</span>' : ''}</span></span></td>
-      <td>⭐ ${Number(r.highest_score).toLocaleString()}</td>
+      <td>${STAR}${Number(r.highest_score).toLocaleString()}</td>
       <td>Lvl ${r.highest_level}/${TOTAL_LEVELS}</td>
     </tr>`;
   }).join('');
@@ -82,7 +83,7 @@ export function renderPersonalLeaderboard(p, runs) {
     <td>${i + 1}</td>
     <td>${new Date(r.played_at).toLocaleDateString()}${i === 0 && r === newest ? '<span class="badge">NEW BEST</span>' : ''}</td>
     <td>Level ${r.level_reached}/${TOTAL_LEVELS}<span class="mini"><i style="width:${(r.level_reached / TOTAL_LEVELS) * 100}%"></i></span></td>
-    <td>⭐ ${r.score.toLocaleString()}</td>
+    <td>${STAR}${r.score.toLocaleString()}</td>
   </tr>`).join('')
   : '<tr><td colspan="4" class="lab" style="padding:24px">No personal runs recorded yet. Complete a game to see your history!</td></tr>';
 }
