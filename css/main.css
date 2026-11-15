@@ -1,4 +1,3 @@
-/* css/main.css - Modern, beautiful underwater aesthetic */
 :root {
   --blue: #0284c7;
   --dark: #0369a1;
@@ -23,9 +22,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ══════════════════════════════════
-   SCREENS
-══════════════════════════════════ */
+/* screens */
 .screen {
   display: none;
   min-height: 100vh;
@@ -40,7 +37,6 @@ body {
   display: flex;
 }
 
-/* Subtle soft ambient light glow */
 .screen::before {
   content: "";
   position: absolute;
@@ -49,7 +45,6 @@ body {
   background: radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.16) 0%, transparent 60%);
 }
 
-/* The reef along the bottom of every menu screen (built by ui.js decorate()) */
 .deco {
   --s: 1;
   position: absolute;
@@ -80,7 +75,6 @@ body {
   50% { transform: rotate(2.6deg) skewX(1.5deg); }
 }
 
-/* a couple of fish drifting by in the background */
 .deco .swimmer {
   position: absolute;
   top: var(--top);
@@ -101,7 +95,6 @@ body {
   to { transform: translateX(-14vw) scaleX(-1); }
 }
 
-/* rising bubbles */
 .deco .bub {
   position: absolute;
   bottom: -20px;
@@ -122,9 +115,6 @@ body {
   .deco .sway, .deco .swimmer, .deco .bub, .fish-big { animation: none; }
 }
 
-/* ══════════════════════════════════
-   LAYOUT
-══════════════════════════════════ */
 .stack {
   position: relative;
   z-index: 2;
@@ -167,7 +157,7 @@ body {
   50% { transform: translateY(-9px) rotate(1.5deg); }
 }
 
-/* loading screen */
+/* loading screen of the game */
 .loader {
   width: 190px;
   height: 10px;
@@ -188,9 +178,6 @@ body {
   to { transform: translateX(260%); }
 }
 
-/* ══════════════════════════════════
-   CARDS
-══════════════════════════════════ */
 .card {
   width: 100%;
   background: rgba(255, 255, 255, 0.96);
@@ -204,9 +191,6 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-/* ══════════════════════════════════
-   INPUTS
-══════════════════════════════════ */
 input {
   width: 100%;
   padding: 13px 15px;
@@ -223,7 +207,7 @@ input:focus {
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
 }
-/* Hide browser default duplicate password reveal button (Edge / IE / Chromium) */
+
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {
   display: none !important;
@@ -282,9 +266,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   pointer-events: none;
 }
 
-/* ══════════════════════════════════
-   BUTTONS
-══════════════════════════════════ */
 .btn {
   display: block;
   width: 100%;
@@ -339,9 +320,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   margin: 2px 0;
 }
 
-/* ══════════════════════════════════
-   BADGES & PILLS
-══════════════════════════════════ */
 .pill {
   background: rgba(12, 74, 110, 0.7);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
@@ -384,9 +362,6 @@ input[type="password"]::-webkit-credentials-auto-fill-button {
   flex: 1;
 }
 
-/* ══════════════════════════════════
-   STATS CARDS
-══════════════════════════════════ */
 .stats {
   display: flex;
   gap: 10px;
@@ -427,9 +402,6 @@ h2 {
   color: #64748b;
 }
 
-/* ══════════════════════════════════
-   LEADERBOARD (DUAL TABS)
-══════════════════════════════════ */
 .lb-tabs {
   display: flex;
   gap: 8px;
@@ -537,9 +509,6 @@ td {
   margin-left: 4px;
 }
 
-/* ══════════════════════════════════
-   PROFILE / AVATAR SCREEN
-══════════════════════════════════ */
 .avatar-wrap {
   display: flex;
   flex-direction: column;
@@ -595,9 +564,6 @@ td {
   box-shadow: 0 4px 0 #7f1d1d, 0 6px 14px rgba(239, 68, 68, 0.35);
 }
 
-/* ══════════════════════════════════
-   MODAL
-══════════════════════════════════ */
 .modal-backdrop {
   display: none;
   position: fixed;
@@ -621,9 +587,6 @@ td {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ══════════════════════════════════
-   HOW TO PLAY
-══════════════════════════════════ */
 .item {
   display: flex;
   gap: 14px;
@@ -660,9 +623,6 @@ td {
   border-bottom: none;
 }
 
-/* ══════════════════════════════════
-   MINI-GAME
-══════════════════════════════════ */
 .ph {
   aspect-ratio: 16/10;
   border: 3px dashed #0284c7;
