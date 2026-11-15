@@ -1,5 +1,5 @@
-/* validation.js - pure input rules shared by the live hints and by auth.js (no DOM).
-   THEME: high cohesion.*/
+// The validations for usernames and passwords
+// High Coheshion concept
 export const usernameRules = [
   { text: '3-16 characters', test: v => v.length >= 3 && v.length <= 16 },
   { text: 'Letters, numbers and _ only (no spaces)', test: v => /^[A-Za-z0-9_]+$/.test(v) },

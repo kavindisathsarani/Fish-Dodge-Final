@@ -10,6 +10,7 @@ export function hearts(sel, n) {
     `<svg class="${i < n ? '' : 'off'}"><use href="#heart"/></svg>`).join('');
 }
 
+// HUD is the information that is displayed on the screen while user is playing
 export function renderHud({ level, pct, lives, score }) {
   setText('#hud-level', `Level ${level}/${TOTAL_LEVELS}`);
   $('#hud-bar').style.width = pct + '%';
@@ -91,14 +92,13 @@ export function renderPersonalLeaderboard(p, runs) {
 function escHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
-
-/* ── The coral reef along the bottom of every menu screen ─────────────────── */
+ // the corals
 const ratio = id => { const v = SYMBOLS[id].viewBox; return v[3] / v[2]; };
-// one sprite: id, which side + % from that side, width (px at full size), height above the floor (px), extra classes
+
 const piece = (id, side, pct, w, b, cls = '', delay = 0) =>
   `<svg class="c ${cls}" style="${side}:${pct}%;--w:${w};--h:${Math.round(w * ratio(id))};--b:${b};animation-delay:-${delay}s" aria-hidden="true"><use href="#${id}"/></svg>`;
 
-const REEF_BACK = [   // hazy, far away
+const REEF_BACK = [ 
   ['coral-fan-b', 'left', 4, 170, 74], ['coral-branch-c', 'left', 17, 150, 70],
   ['coral-fan-a', 'right', 5, 165, 74], ['coral-branch-b', 'right', 18, 150, 70],
 ].map(a => piece(...a, 'far')).join('');
@@ -131,8 +131,7 @@ function navHtml(active) {
 const navBack = () => `<header class="nav minimal">${BRAND}<div class="nav-right"><button class="nav-back" data-action="howtoBack">← Back</button></div></header>`;
 
 export function decorate() {
-  // top navigation: full bar on home / leaderboard / account, a simple back bar on How to Play
-  // (How to Play can be opened from the pause menu, so it only offers "back")
+  
   document.querySelectorAll('.screen[data-nav]').forEach(sc => {
     const k = sc.dataset.nav;
     sc.insertAdjacentHTML('afterbegin', k === 'howto' ? navBack() : navHtml(k === 'account' ? '' : k));
