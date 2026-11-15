@@ -1,5 +1,4 @@
-/* css/icons.css - sizing and colours for the inline SVG icons that replace the emoji.
-   Icons scale with the text around them (1em) and take its colour (currentColor). */
+/*  This sets the size and colour of SVG icons. Icons match the text size and use the same text colour. */
 .ic {
   width: 1em;
   height: 1em;
@@ -10,19 +9,17 @@
 }
 .ic.fish { width: 1.7em; }
 
-/* colour hints where the icon sits on its own */
 .ic.star { color: #f5b301; }
 .tone-gold { color: #f5b301; }
 .tone-blue { color: #0284c7; }
 .tone-red  { color: #ef4444; }
 
-/* medals for the top three players */
 .ic.medal { width: 1.3em; height: 1.3em; }
 .ic.medal.m1 { color: #facc15; }
 .ic.medal.m2 { color: #cbd5e1; }
 .ic.medal.m3 { color: #d97706; }
 
-/* stat tiles, ribbon and link cards */
+
 .stat.t-blue .ic  { color: #0284c7; }
 .stat.t-gold .ic  { color: #f5b301; }
 .stat.t-green .ic { color: #16a34a; }
