@@ -1,4 +1,3 @@
--- Run this once in Supabase: SQL Editor > New query > paste > Run
 create table profiles (
   id uuid primary key references auth.users on delete cascade,
   username text not null,
@@ -27,7 +26,7 @@ alter table profiles enable row level security;
 alter table player_progress enable row level security;
 alter table game_runs enable row level security;
 
--- Row Level Security: a player can only touch their own rows
+-- Row Level Security
 create policy "own profile"  on profiles        for all using (auth.uid() = id)      with check (auth.uid() = id);
 create policy "own progress" on player_progress for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "own runs"     on game_runs       for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

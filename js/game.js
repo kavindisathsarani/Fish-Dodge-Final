@@ -1,13 +1,4 @@
-/* game.js - the canvas game loop, physics, collisions and drawing.
-   THEME: high cohesion. No DOM and no database in here: it only talks to the canvas and
-   announces what happened through events.js ('hud', 'life-lost', 'out-of-lives', 'level-complete', ...).
-
-   How it stays smooth:
-   - everything is drawn from pre-rendered sprites (art.js), so a frame is a few dozen drawImage calls
-   - the canvas is sized to the screen's real pixel density, so it is sharp on laptops and phones
-   - movement uses the real time between frames and eases (no instant start/stop), so it feels fluid
-   - getting hit glides you back to a checkpoint instead of teleporting you
-*/
+//it only talks to the canvas then announces what happened through events.js
 import { WORLD, levelConfig, buildLevel, bobOffset } from './levels.js';
 import { ROCK_POINTS, LEVEL_POINTS, FOOD_POINTS } from './scoring.js';
 import * as input from './input.js';
@@ -16,18 +7,17 @@ import * as art from './art.js';
 import { rng } from './rng.js';
 
 const { W, H, TOP, BOTTOM, FISH_X } = WORLD;
-const K = 2;                        // pre-rendered sprites are 2x the logical size (crisp on hi-dpi)
-const FISH_SCALE = 0.62;            // art units -> pixels
-const LOOP = 1920;                  // the reef strips repeat every 1920px
+const K = 2;                        // pre-rendered sprites 
+const FISH_SCALE = 0.62;            // art units
+const LOOP = 1920;                  // the reef strips
 const SAND = { far: H - 96, mid: H - 70, near: H - 52, front: H - 36 };
 
-// three circles that follow the fish's body; what the rocks are tested against
 const HITBOX = [{ dx: 15, dy: 0, r: 12 }, { dx: -3, dy: 1, r: 14 }, { dx: -21, dy: 0, r: 9 }];
 
 let canvas, ctx, raf = 0, last = 0, lastPct = -1, lastLives = -1, lastScore = -1, scale = 1;
-let sp = null;                      // sprites, once baked
+let sp = null;                      
 let readyResolve, readyReject;
-/** Resolves when the artwork is baked and the game can start (about 100 ms). */
+
 export const ready = new Promise((res, rej) => { readyResolve = res; readyReject = rej; });
 
 const s = {
@@ -38,7 +28,6 @@ const s = {
   particles: [], floaters: [], bubbles: [], motes: [], trail: 0, tail: 0, finBeat: 0,
 };
 
-/* ═══════════════ setup ═══════════════ */
 export function init(c) {
   canvas = c;
   ctx = c.getContext('2d');
@@ -60,7 +49,7 @@ function resize() {
   scale = canvas.width / W;
 }
 
-/* ═══════════════ pre-rendering (runs once, ~100 ms) ═══════════════ */
+//run once
 const make = (w, h) => { const c = document.createElement('canvas'); c.width = Math.ceil(w * K); c.height = Math.ceil(h * K); const g = c.getContext('2d'); g.scale(K, K); return [c, g]; };
 
 async function bake() {
@@ -129,7 +118,6 @@ function bakeGlow(r, a, b) {
   return Object.assign(c, { lw: r * 2, lh: r * 2 });
 }
 
-/** A wavy sand strip that tiles seamlessly (all sine periods divide LOOP). */
 function sandPath(g, base, amp, seed) {
   const R = rng(seed), p1 = R() * 6, p2 = R() * 6;
   g.beginPath(); g.moveTo(0, H + 4);
@@ -142,7 +130,7 @@ function sandPath(g, base, amp, seed) {
 
 function placeSprite(g, spr, x, base, sc, alpha = 1) {
   const w = spr.lw * sc, h = spr.lh * sc;
-  for (const ox of [0, -LOOP, LOOP]) {          // draw wrapped copies so nothing is cut at the seam
+  for (const ox of [0, -LOOP, LOOP]) {          
     const px = x + ox - w / 2;
     if (px + w < 0 || px > LOOP) continue;
     g.globalAlpha = alpha; g.drawImage(spr, px, base - h + 3 * sc, w, h);
@@ -152,7 +140,7 @@ function placeSprite(g, spr, x, base, sc, alpha = 1) {
 
 function bakeReef({ reef, base, scale: [s0, s1], gap: [g0, g1], haze, sand, seed }) {
   const [c, g] = make(LOOP, 260);
-  g.translate(0, -(H - 260));                    // strip covers the bottom 260px of the screen
+  g.translate(0, -(H - 260));                   
   const R = rng(seed);
   sandPath(g, base, 7, seed);
   const sg = g.createLinearGradient(0, base - 10, 0, H); sg.addColorStop(0, sand[0]); sg.addColorStop(1, sand[1]);
@@ -161,7 +149,7 @@ function bakeReef({ reef, base, scale: [s0, s1], gap: [g0, g1], haze, sand, seed
     const spr = reef[Math.floor(R() * reef.length)];
     placeSprite(g, spr, x, base + 4, s0 + R() * (s1 - s0));
   }
-  g.globalCompositeOperation = 'source-atop';    // paint a haze over everything so it sits "far away"
+  g.globalCompositeOperation = 'source-atop';    
   g.fillStyle = haze; g.fillRect(0, H - 260, LOOP, 260);
   return c;
 }
@@ -173,7 +161,7 @@ function bakeNear(reef) {
   sandPath(g, base, 8, 21);
   const sg = g.createLinearGradient(0, base - 12, 0, H); sg.addColorStop(0, '#f3d27a'); sg.addColorStop(.5, '#e0a64a'); sg.addColorStop(1, '#b97b2c');
   g.fillStyle = sg; g.fill();
-  sp.anchors = [];                               // where the swaying anemones go
+  sp.anchors = [];                              
   for (let x = 70; x < LOOP - 40; x += 150 + R() * 110) {
     if (R() < .3) { sp.anchors.push({ x, s: .85 + R() * .35, v: Math.floor(R() * 2), ph: R() * 6 }); continue; }
     placeSprite(g, reef[Math.floor(R() * reef.length)], x, base + 6, .72 + R() * .4);
@@ -203,7 +191,6 @@ function bakeFront() {
   return c;
 }
 
-/** One boulder, baked once. Lit from the upper left; skins add moss, polyps or barnacles. */
 function bakeRock(i) {
   const R = rng(i * 77 + 3), skin = i % 3, S = 84, [c, g] = make(S, S);
   const rad = 32, pts = art.rockShape(R, 11);
@@ -227,14 +214,14 @@ function bakeRock(i) {
     g.fillStyle = 'rgba(74,222,128,.85)';
     for (let n = 0; n < 5; n++) { g.beginPath(); g.ellipse(-14 + n * 8 + R() * 4, -rad * .72 + R() * 5, 7 + R() * 4, 3.5 + R() * 2, (R() - .5) * .6, 0, 7); g.fill(); }
     g.fillStyle = 'rgba(21,128,61,.6)'; g.beginPath(); g.ellipse(-4, -rad * .64, 16, 3.5, 0, 0, 7); g.fill();
-  } else if (skin === 1) {                                 // coral polyps
+  } else if (skin === 1) {                                 
     const hue = R() < .5 ? 340 : 22;
     for (let n = 0; n < 7; n++) {
       const x = -6 + R() * 22, y = 6 + R() * 18;
       g.fillStyle = `hsl(${hue} 85% 62%)`; g.beginPath(); g.arc(x, y, 3 + R() * 1.6, 0, 7); g.fill();
       g.fillStyle = `hsl(${hue + 20} 95% 85%)`; g.beginPath(); g.arc(x - .8, y - .8, 1.2, 0, 7); g.fill();
     }
-  } else {                                                 // barnacles
+  } else {                                                
     g.fillStyle = 'rgba(253,246,214,.85)'; g.strokeStyle = 'rgba(80,70,50,.5)'; g.lineWidth = 1;
     for (let n = 0; n < 8; n++) { const x = (R() - .5) * 36, y = (R() - .2) * 30; g.beginPath(); g.arc(x, y, 2 + R() * 1.6, 0, 7); g.fill(); g.stroke(); }
   }
@@ -247,7 +234,6 @@ function bakeRock(i) {
   return Object.assign(c, { lw: S, lh: S });
 }
 
-/* ═══════════════ public controls ═══════════════ */
 export async function startLevel(level, banked, startScore = 0) {
   if (!sp) await ready;
   resize();
@@ -272,7 +258,7 @@ export const stop   = () => { s.running = false; cancelAnimationFrame(raf); };
 export const getState = () => ({
   running: s.running, level: s.level, levelScore: s.levelScore, lives: s.lives, total: s.banked + s.levelScore,
 });
-/** For automated tests only. */
+
 export const _debug = () => s;
 
 function hud(force) {
@@ -284,13 +270,12 @@ function hud(force) {
   }
 }
 
-/* ═══════════════ the loop ═══════════════ */
 function loop(t) {
   if (!s.running) return;
   const dt = Math.max(0, Math.min((t - last) / 1000, 0.1));
   last = t;
   if (!s.paused) {
-    let left = dt;                                 // long frames are split so fast fish can't skip through a rock
+    let left = dt;                                 
     while (left > 0 && s.running && !s.paused) { const d = Math.min(left, 1 / 60); update(d); left -= d; }
   }
   if (s.running) { draw(); raf = requestAnimationFrame(loop); }
@@ -306,7 +291,6 @@ function update(dt) {
   tickEffects(dt);
   if (s.hitstop > 0) { s.hitstop -= dt; if (s.hitstop <= 0) beginRewind(); return; }
 
-  // ── steering: ease toward the wanted speed, so the fish glides instead of snapping ──
   if (s.rewind) { runRewind(dt); return; }
   const aim = input.pointerTarget();
   let want = 0;
@@ -317,7 +301,7 @@ function update(dt) {
   if (s.y < TOP) { s.y = TOP; s.vy = Math.max(0, s.vy); }
   if (s.y > BOTTOM) { s.y = BOTTOM; s.vy = Math.min(0, s.vy); }
 
-  const run = s.finishing ? Math.max(.25, 1 - s.finishing * 1.2) : 1;      // ease the world to a stop after the line
+  const run = s.finishing ? Math.max(.25, 1 - s.finishing * 1.2) : 1;      
   s.worldX += s.speed * run * dt;
   if (s.inv > 0) s.inv -= dt;
 
@@ -348,11 +332,11 @@ function tickEffects(dt) {
   for (const p of s.particles) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += (p.g || 0) * dt; p.life -= p.decay * dt; }
   s.particles = s.particles.filter(p => p.life > 0);
 
-  for (const b of s.bubbles) {                       // ambient bubbles rise at a steady real-time speed
+  for (const b of s.bubbles) {                       
     b.y -= b.v * dt;
     if (b.y < -12) { b.y = H + 12; b.x = Math.random() * W; }
   }
-  s.trail += dt;                                     // a bubble from the fish's mouth now and then
+  s.trail += dt;                                     
   if (s.trail > .5 && !s.rewind) {
     s.trail = 0;
     s.particles.push({ x: FISH_X + 46, y: s.y - 2, vx: -s.speed * .25, vy: -22 - Math.random() * 14, g: -6, life: 1, decay: .75, r: 1.6 + Math.random() * 2.2, color: 'rgba(255,255,255,.7)', ring: true });
@@ -364,7 +348,7 @@ function eatFood(dt, fx) {
     if (f.collected) continue;
     const fy = f.col >= 0 ? f.y0 + s.colBob[f.col] : f.y0;
     const dx = fx - f.x, dy = s.y - fy, d = Math.hypot(dx, dy);
-    if (d < 85 && f.col < 0) {                       // pellets near the fish drift toward its mouth
+    if (d < 85 && f.col < 0) {                       
       const pull = (1 - d / 85) * 7 * dt; f.x += dx * pull; f.y0 += dy * pull;
     }
     f.y = fy;
@@ -405,7 +389,6 @@ function collides(fx) {
   return false;
 }
 
-/* ── getting hit: a quick freeze, then a smooth glide back to the last checkpoint ── */
 function loseLife() {
   s.lives--; s.shake = .4; s.flash = .3; s.hitstop = .09; s.vy = 0;
   burst(FISH_X, s.y, '#ef4444', '#f97316', 14, 130);
@@ -447,9 +430,8 @@ function burst(x, y, c1, c2, n, spd) {
 }
 const float = (x, y, text, color) => s.floaters.push({ x, y, text, color, life: 1, vy: -48 });
 
-/* ═══════════════ drawing ═══════════════ */
 function strip(img, parallax, y) {
-  const x = -(((s.worldX * parallax) % LOOP + LOOP) % LOOP);        // 0 .. -LOOP; the strip is drawn twice so it always fills the screen
+  const x = -(((s.worldX * parallax) % LOOP + LOOP) % LOOP);        
   ctx.drawImage(img, x, y, LOOP, img.height / K);
   ctx.drawImage(img, x + LOOP, y, LOOP, img.height / K);
 }
@@ -469,14 +451,14 @@ function draw() {
   drawMotes();
   drawKelp(t);
   strip(sp.mid, .5, H - 260);
-  drawSeaLife(t);                                  // decoration only: faded, behind rocks and player
+  drawSeaLife(t);                                 
   drawBubbles(t);
   strip(sp.near, 1, H - 260);
   drawAnemones(t);
   drawFinish();
   drawFood(t);
   drawRocks();
-  strip(sp.front, 1, H - 120);                     // front sand hides the bottoms of the rocks
+  strip(sp.front, 1, H - 120);                     
 
   drawParticles();
   drawFish(t);
@@ -499,30 +481,29 @@ function drawSchool(t) {
   ctx.restore();
 }
 
-/* Faded decorative sea life. Drawn well behind the rocks and the player, low opacity, no collisions. */
 function drawSeaLife(t) {
   const L = sp.life, wx = s.worldX;
   const wrap = (v, span) => ((v % span) + span) % span;
   ctx.save();
-  // little reef fish drifting in both directions
+
   [[L.fo, 0, 150, .5, 22, 1], [L.fy, 1, 230, .45, 14, -1], [L.fp, 2, 90, .42, 30, 1], [L.fo, 3, 330, .4, 18, -1], [L.fy, 4, 280, .38, 26, 1]].forEach(([img, i, y0, a, sp_, dir]) => {
     const span = W + 200, x = wrap(i * 260 + dir * t * sp_ - wx * .2, span) - 100;
     const y = y0 + Math.sin(t * .9 + i * 2) * 8, w = img.lw, h = img.lh;
     ctx.globalAlpha = a; ctx.save(); ctx.translate(x, y); if (dir < 0) ctx.scale(-1, 1);
     ctx.drawImage(img, -w / 2, -h / 2, w, h); ctx.restore();
   });
-  // jellyfish pulsing slowly
+  
   [[L.jA, 0, 130, .42], [L.jB, 1, 300, .34]].forEach(([img, i, y0, a]) => {
     const x = wrap(i * 520 + 180 - wx * .16, W + 160) - 80;
     const pulse = 1 + Math.sin(t * 2 + i * 3) * .06, y = y0 + Math.sin(t * .6 + i * 4) * 22;
     ctx.globalAlpha = a; ctx.save(); ctx.translate(x, y); ctx.scale(1 / pulse, pulse);
     ctx.drawImage(img, -img.lw / 2, -img.lh / 2, img.lw, img.lh); ctx.restore();
   });
-  // seahorse bobbing near the reef
+
   { const x = wrap(640 - wx * .3, W + 160) - 80, y = SAND.mid - 78 + Math.sin(t * 1.3) * 6;
     ctx.globalAlpha = .5; ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(t * 1.1) * .08);
     ctx.drawImage(L.horse, -L.horse.lw / 2, -L.horse.lh / 2, L.horse.lw, L.horse.lh); ctx.restore(); }
-  // crabs sidling along the sand
+ 
   [[0, 300], [1, 980]].forEach(([i, x0]) => {
     const x = wrap(x0 + Math.sin(t * .35 + i * 2) * 60 - wx * .5, LOOP) - 60;
     if (x > W + 40) return;

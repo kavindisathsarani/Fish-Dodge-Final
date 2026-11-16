@@ -1,8 +1,4 @@
-/* auth.js - register / login / logout and session persistence. THEME: virtual identity.
-   Supabase mode: Supabase Auth (email = username@fishdodge.app, password hashed by Supabase).
-   Local mode (fallback / offline): salted hash stored in localStorage.
-   Both modes keep the username in a cookie so the player is recognised on reload.
-*/
+//virtual identity
 import { sb, useSupabase, ready } from './supabase.js';
 import { syncLocalToCloud } from './progress.js';
 import { usernameRules, passwordRules, firstError } from './validation.js';
@@ -10,7 +6,6 @@ import { usernameRules, passwordRules, firstError } from './validation.js';
 let user = null; // { id, username }
 export const currentUser = () => user;
 
-// ---- cookie ----
 const setCookie = (v, days) => {
   document.cookie = `fd_user=${encodeURIComponent(v)};max-age=${days * 86400};path=/;SameSite=Lax`;
 };
@@ -18,10 +13,9 @@ const getCookie = () => {
   const m = document.cookie.match(/fd_user=([^;]+)/);
   return m ? decodeURIComponent(m[1]) : null;
 };
-/** The username remembered in the cookie. Only used to pre-fill the login box - it never logs anyone in. */
+
 export const rememberedUsername = getCookie;
 
-// ---- local session: proof that THIS browser really logged in (password checked), not just a name in a cookie ----
 const SESSION_KEY = 'fd_session';
 function startLocalSession(key) {
   const all = localUsers(), token = makeSalt();
@@ -30,7 +24,7 @@ function startLocalSession(key) {
 }
 const endLocalSession = () => localStorage.removeItem(SESSION_KEY);
 
-// ---- helpers ----
+//Supabase Auth ,email = username@fishdodge.app, password hashed by Supabase
 const emailOf = n => `${n.toLowerCase()}@fishdodge.app`;
 const localUsers = () => JSON.parse(localStorage.getItem('fd_users') || '{}');
 
@@ -48,7 +42,7 @@ async function hash(pw, salt) {
       return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
     } catch (e) {}
   }
-  // Safe fallback hash when crypto.subtle is unavailable in non-secure HTTP contexts
+
   let h = 0x811c9dc5;
   const str = salt + pw;
   for (let i = 0; i < str.length; i++) {
@@ -88,8 +82,6 @@ export async function restoreSession() {
     }
   }
 
-  // Local mode: only trust a session that was created by a real, password-checked login.
-  // (A username cookie alone is NOT enough - that is what used to let you skip the password.)
   if (!user) {
     try {
       const sess = JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
@@ -122,8 +114,6 @@ export async function register(username, pw, pw2) {
         throw new Error(error.message);
       }
       if (data?.user) {
-        // "Confirm email" ON in Supabase => no session yet. Try to sign straight in; if that fails the
-        // account can't save scores to the cloud, so say so instead of silently playing local-only.
         let session = data.session;
         if (!session) {
           const r = await sb.auth.signInWithPassword({ email: emailOf(username), password: pw });
@@ -180,11 +170,10 @@ export async function login(username, pw) {
           if (p?.username) profileName = p.username;
         } catch (_) {}
         user = { id: data.user.id, username: profileName };
-        // make sure a profile row exists (needed for the global leaderboard) and push any progress that was
-        // saved on this device while the account was local-only
+        
         sb.from('profiles').upsert({ id: data.user.id, username: profileName }).then(() => {}, () => {});
         syncLocalToCloud(user, username.toLowerCase()).catch(() => {});
-        const all = localUsers(), salt = makeSalt();     // (one salt: the stored hash must match the salt stored with it)
+        const all = localUsers(), salt = makeSalt();    
         all[username.toLowerCase()] = { username: profileName, salt, hash: await hash(pw, salt) };
         localStorage.setItem('fd_users', JSON.stringify(all));
         startLocalSession(username.toLowerCase());
@@ -199,7 +188,7 @@ export async function login(username, pw) {
     }
   }
 
-  // 2. Check local users fallback
+ 
   const rec = localUsers()[username.toLowerCase()];
   if (rec) {
     const pwHash = await hash(pw, rec.salt);

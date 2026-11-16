@@ -1,7 +1,4 @@
-/* progress.js - saves player progress, highest score and runs per user. THEME: virtual identity.
-   Supabase mode: tables player_progress + game_runs (protected by Row Level Security).
-   Local mode: localStorage, keyed by the user id. Other files never know which mode is used.
-*/
+//virtual identity
 import { sb, useSupabase, ready } from './supabase.js';
 
 const blank = () => ({ current_level: 1, highest_level: 0, highest_score: 0, games_played: 0 });
@@ -60,6 +57,7 @@ export async function saveLevelDone(u, doneLevel, nextLevel) {
   await writeProgress(u, p);
 }
 
+//saves player progress, highest score and runs per user.
 export async function saveRun(u, { level, score }) {
   if (!u) return;
   await ready;
@@ -101,8 +99,7 @@ export async function loadGlobalLeaderboard(currentUserId) {
   }
 }
 
-/* Accounts that were created while Supabase was unreachable (or needed email confirmation) kept their scores
-   only in this browser, under a local id. When the same player later logs in to Supabase, copy that progress up. */
+//if supabase unavailable, scores were saved in this browser.
 export async function syncLocalToCloud(u, localKey) {
   await ready;
   if (!useSupabase || !sb || !u || !localKey || localKey === u.id) return;
@@ -120,5 +117,5 @@ export async function syncLocalToCloud(u, localKey) {
   if (error) { console.warn('syncLocalToCloud failed:', error.message); return; }
   const runs = (s.runs || []).map(r => ({ user_id: u.id, level_reached: r.level_reached, score: r.score, played_at: r.played_at }));
   if (runs.length) await sb.from('game_runs').insert(runs);
-  localStorage.removeItem('fd_progress_' + localKey);     // done: avoid double counting next login
+  localStorage.removeItem('fd_progress_' + localKey);     
 }

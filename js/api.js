@@ -1,8 +1,4 @@
-/* api.js - the ONLY file that talks to the Fish Game API. THEME: interoperability.
-   Protocol: HTTP GET request, JSON response (docs: https://marcconrad.com/uob/fish/doc.php).
-   The API returns a link to an image and the solution. Field names are detected automatically
-   (the raw response is also printed to the browser console as "[Fish API] raw response").
-*/
+// interoperability
 import { FISH_API_URL } from './config.js';
 
 async function request(url) {
@@ -11,7 +7,7 @@ async function request(url) {
   return res.json();
 }
 
-// turn nested JSON into a flat list of [key, value] pairs
+// key, value pairs
 const flatten = (o, p = '') => Object.entries(o).flatMap(([k, v]) =>
   v && typeof v === 'object' ? flatten(v, p + k + '.') : [[p + k, v]]);
 

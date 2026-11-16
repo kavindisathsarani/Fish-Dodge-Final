@@ -1,12 +1,3 @@
--- ============================================================================================
--- SAFE: only adds things; nothing is dropped, deleted or updated.
--- Run ONCE in Supabase: SQL Editor > New query > paste > Run   (safe to run again)
--- Fixes: new players who play but never appear on the Global Leaderboard.
--- Cause: the leaderboard lists a player only if BOTH a `profiles` row and a `player_progress` row exist,
--- and the browser could silently fail to create them (e.g. "Confirm email" on, slow network).
--- ============================================================================================
-
--- 1) Create the profile + progress rows on the SERVER the moment an account is created.
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql

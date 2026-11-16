@@ -1,5 +1,3 @@
--- Lets a logged-in player delete their OWN account. Because profiles, player_progress and
--- game_runs reference auth.users "on delete cascade", all their data is removed too.
 create or replace function public.delete_my_account()
 returns void
 language sql

@@ -13,17 +13,15 @@ import {
 } from './ui.js';
 import './input.js';
 
-injectSprites();   // the fish, corals, hearts... used by every screen (drawn once, from code)
+injectSprites();   
 
 let user = null, banked = 0, nextLevel = 1, howtoFrom = 'menu', runSaved = false;
 const gameActive = () => $('#game').classList.contains('active');
 const overlay = (id, on_) => $(id).classList.toggle('on', on_);
 
-// Clean SVG eye icons for toggling password visibility
 const EYE_OPEN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
 const EYE_CLOSED = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
 
-// Initialize all eye toggles with SVG and toggle action
 document.querySelectorAll('.eye-btn').forEach(btn => {
   btn.innerHTML = EYE_OPEN;
   btn.addEventListener('click', e => {
@@ -37,7 +35,6 @@ document.querySelectorAll('.eye-btn').forEach(btn => {
   });
 });
 
-// Developer mode: Shift+D on the menu screen toggles level jump
 let devMode = false;
 document.addEventListener('keydown', e => {
   if (e.shiftKey && e.key === 'D' && $('#menu').classList.contains('active')) {
@@ -82,7 +79,7 @@ async function goLeaderboard() {
   show('leaderboard');
   showGlobalLb();
 
-  // Load and render personal best runs
+  //personal best runs
   try {
     const { p, runs } = await loadProgress(user);
     renderPersonalLeaderboard(p, runs);
@@ -90,7 +87,7 @@ async function goLeaderboard() {
     console.error('Personal progress error:', err);
   }
 
-  // Load and render global leaderboard
+  //global leaderboard
   $('#glb-body').innerHTML = '<tr><td colspan="4" class="lab" style="padding:24px">Loading rankings…</td></tr>';
   setText('#glb-your-rank', '');
   try {
@@ -254,7 +251,6 @@ function togglePause() {
   overlay('#pause-overlay', true);
 }
 
-// Live validation hints on Register and Password Modal
 const regHints = [
   liveHints('#r-user',  '#r-user-h',  usernameRules),
   liveHints('#r-pass',  '#r-pass-h',  passwordRules),
@@ -352,17 +348,14 @@ on('fc-correct', () => { hearts('#co-hearts', 3); show('correct'); });
 on('fc-wrong',   () => { hearts('#in-hearts', 0); show('incorrect'); });
 on('fc-timeout', () => { hearts('#to-hearts', 0); show('timeout'); });
 
-// ── Start-up ──────────────────────────────────────────────────────────────
-// Show a short loading screen while the artwork is prepared and any saved session is checked.
-// The login form only appears once that is settled, so a late "session restored" can never
-// yank you to the menu while you are typing your username.
+
 show('splash');
 decorate();
 game.init($('#canvas'));
 
 const showLogin = () => {
   const name = auth.rememberedUsername();
-  if (name && !$('#l-user').value) $('#l-user').value = name;   // convenience only - the password is still required
+  if (name && !$('#l-user').value) $('#l-user').value = name;   
   show('login');
   (name ? $('#l-pass') : $('#l-user')).focus({ preventScroll: true });
 };
@@ -370,11 +363,11 @@ const showLogin = () => {
 Promise.all([
   auth.restoreSession().catch(() => null),
   game.ready.catch(() => null),
-  new Promise(r => setTimeout(r, 450)),        // keep the loading screen from flashing
+  new Promise(r => setTimeout(r, 450)),        
 ]).then(([u]) => {
   user = u;
   return u ? goMenu() : showLogin();
 }).catch(showLogin);
 
-// safety net: never leave a player stuck on the loading screen
+
 setTimeout(() => { if ($('#splash').classList.contains('active')) showLogin(); }, 9000);

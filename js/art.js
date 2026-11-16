@@ -1,20 +1,9 @@
-/* art.js - all artwork for Fish Dodge, drawn as SVG from code.
-   THEME: high cohesion - one place owns how things look.
-
-   Every piece is a small object { viewBox:[x,y,w,h], inner:'<svg markup>' }.
-   The same piece is used in two ways, so the menu and the game always match:
-     1. as a <symbol> in the page (menu fish, corals on the menu screens, how-to icons)
-     2. rasterised ONCE into a canvas sprite for the game loop (cheap to draw 60 times a second)
-*/
+//high cohesion
 import { rng } from './rng.js';
 
 const r1 = n => Math.round(n * 10) / 10;
 const hsl = (h, s, l, a = 1) => `hsl(${Math.round(h)} ${s}% ${l}%${a < 1 ? ` / ${a}` : ''})`;
 
-/* ════════════════════════════════════════════
-   THE FISH  (faces right; origin = middle of the body)
-   Three parts so the game can animate them: tail, body, pectoral fin.
-════════════════════════════════════════════ */
 const FISH_VB = [-112, -64, 224, 128];
 const BODY = 'M52 3C51 -12 36 -29 6 -31C-18 -32 -35 -20 -43 -7C-45 -3 -45 3 -43 7C-35 20 -18 31 6 30C36 29 51 17 52 3Z';
 export const FISH_TAIL_JOINT = { x: -41, y: 0 };
@@ -95,15 +84,11 @@ export function fishBody(u = 'fb') {
   <circle cx="34.4" cy="-4.2" r="1.2" fill="#fff" fill-opacity=".9"/>` };
 }
 
-/** Whole fish at rest, for menu / how-to / feedback screens. */
 export function fishStatic(u = 'fs') {
   const t = fishTail(u + 't'), b = fishBody(u + 'b'), p = fishFin(u + 'p');
   return { viewBox: FISH_VB, inner: t.inner + b.inner + p.inner };
 }
 
-/* ════════════════════════════════════════════
-   FISH FOOD  (a small pinch of colourful pellets)
-════════════════════════════════════════════ */
 export function foodPellets(u = 'fd') {
   const pellet = (cx, cy, r, a, b, c, id) => `
   <radialGradient id="${u}${id}" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="${a}"/><stop offset=".55" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>
@@ -122,12 +107,6 @@ export function heart(u = 'ht') {
   <path d="M6 6.2C7.4 4.6 9.6 4.8 10.6 6.4" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.6" stroke-linecap="round"/>` };
 }
 
-/* ════════════════════════════════════════════
-   CORALS
-   All grow upward from the bottom-middle of their box.
-════════════════════════════════════════════ */
-
-/** Branching staghorn coral. */
 export function branchCoral(seed = 1, hue = 335, u = 'bc') {
   const rand = rng(seed * 131 + 7);
   const segs = [], tips = [];
@@ -161,7 +140,6 @@ export function branchCoral(seed = 1, hue = 335, u = 'bc') {
   return { viewBox: vb, inner: out };
 }
 
-/** Sea fan (gorgonian): a lacy fan of ribs. */
 export function fanCoral(hue = 305, u = 'fc') {
   const rand = rng(Math.round(hue) * 17 + 3);
   const bx = 90, by = 158, N = 11, ribs = [];
@@ -173,9 +151,9 @@ export function fanCoral(hue = 305, u = 'fc') {
     ribs.push({ ang, L, t });
   }
   const pt = (rb, f, wob = 0) => [bx + Math.cos(rb.ang) * rb.L * f + Math.sin(rb.ang) * wob, by + Math.sin(rb.ang) * rb.L * f - Math.cos(rb.ang) * wob];
-  // soft veil
+
   out += `<path d="M${bx} ${by}${ribs.map(rb => `L${r1(pt(rb, 1)[0])} ${r1(pt(rb, 1)[1])}`).join('')}Z" fill="url(#${u}v)"/>`;
-  // cross links
+
   for (const f of [.3, .46, .62, .78, .93]) {
     let d = '';
     ribs.forEach((rb, i) => { const [x, y] = pt(rb, f, Math.sin(i * 1.7 + f * 9) * 2.6); d += (i ? 'L' : 'M') + r1(x) + ' ' + r1(y); });
@@ -192,7 +170,7 @@ export function fanCoral(hue = 305, u = 'fc') {
   return { viewBox: [0, 12, 180, 166], inner: out };
 }
 
-/** Brain coral: a dome covered in winding grooves. */
+
 export function brainCoral(hue = 48, u = 'br') {
   const rand = rng(Math.round(hue) * 7 + 11);
   const dome = 'M6 108C6 44 46 8 86 8C126 8 166 44 166 108Z';
@@ -218,7 +196,6 @@ export function brainCoral(hue = 48, u = 'br') {
     <path d="${dome}" fill="none" stroke="${hsl(hue, 60, 22)}" stroke-opacity=".5" stroke-width="2"/>` };
 }
 
-/** Tube / organ-pipe coral. */
 export function tubeCoral(hue = 22, u = 'tb') {
   const tubes = [
     { x: 28, h: 66, w: 21, lean: -4 }, { x: 56, h: 108, w: 25, lean: -2 }, { x: 86, h: 136, w: 27, lean: 1 },
@@ -241,7 +218,6 @@ export function tubeCoral(hue = 22, u = 'tb') {
   return { viewBox: [0, 12, 164, 150], inner: `<defs>${defs}</defs><ellipse cx="82" cy="157" rx="74" ry="5" fill="#000" fill-opacity=".2"/>${body}` };
 }
 
-/** Sea anemone: a soft column crowned with waving tentacles. */
 export function anemone(hue = 285, u = 'an') {
   const rand = rng(Math.round(hue) * 5 + 2);
   const cx = 65, cy = 88;
@@ -262,7 +238,6 @@ export function anemone(hue = 285, u = 'an') {
     <ellipse cx="${cx}" cy="${cy}" rx="27" ry="8" fill="${hsl(hue, 60, 30)}"/>${t}` };
 }
 
-/** Kelp / seaweed: three wavy blades. */
 export function kelp(seed = 1, u = 'kp') {
   const rand = rng(seed * 53 + 9);
   const H = 200, blades = [{ x: 22, h: H * .78, w: 11 }, { x: 36, h: H, w: 14 }, { x: 50, h: H * .6, w: 10 }];
@@ -304,13 +279,6 @@ export function shell(u = 'sh') {
     <path d="M24 50L36 50L34 55L26 55Z" fill="#f9a8d4" stroke="#be185d" stroke-opacity=".5" stroke-width="1.2"/>` };
 }
 
-
-/* ════════════════════════════════════════════
-   SEA LIFE  (decoration only - drawn faded, behind the rocks, never in the way)
-   Fish / crab / seahorse face right; jellyfish hangs from its top.
-════════════════════════════════════════════ */
-
-/** Small reef fish (clownfish-ish stripes, or a yellow tang style). */
 export function reefFish(hue = 28, u = 'rf', stripes = true) {
   const body = hsl(hue, 92, 56), dark = hsl(hue, 90, 38), light = hsl(hue, 100, 78);
   return { viewBox: [0, 0, 80, 48], inner: `
@@ -363,10 +331,6 @@ export function jellyfish(hue = 300, u = 'jf') {
   <ellipse cx="26" cy="16" rx="10" ry="5" fill="#fff" fill-opacity=".5" transform="rotate(-18 26 16)"/>` };
 }
 
-/* ════════════════════════════════════════════
-   ROCK  (shared shape maths: used by the menu SVG and by the game's canvas rocks)
-════════════════════════════════════════════ */
-/** Returns jagged-but-soft polygon points around (0,0) for radius 1. */
 export function rockShape(rand, n = 11) {
   const pts = [];
   for (let i = 0; i < n; i++) {
@@ -377,7 +341,7 @@ export function rockShape(rand, n = 11) {
   return pts;
 }
 
-/** Soft closed path through points (midpoint smoothing). */
+
 export function smoothPath(pts, s = 1) {
   const n = pts.length, mid = (a, b) => [(a[0] + b[0]) / 2 * s, (a[1] + b[1]) / 2 * s];
   let m = mid(pts[n - 1], pts[0]), d = `M${r1(m[0])} ${r1(m[1])}`;
@@ -407,9 +371,6 @@ export function rockArt(seed = 3, u = 'rk') {
     <circle cx="20" cy="40" r="1.8" fill="#fde68a" fill-opacity=".8"/><circle cx="25" cy="43" r="1.4" fill="#fde68a" fill-opacity=".8"/>` };
 }
 
-/* ════════════════════════════════════════════
-   THE SPRITE CATALOGUE
-════════════════════════════════════════════ */
 export const CORALS = {
   'coral-branch-a': branchCoral(1, 338, 'bca'),
   'coral-branch-b': branchCoral(4, 18, 'bcb'),
@@ -450,7 +411,6 @@ export const SYMBOLS = {
 
 const sym = (id, a) => `<symbol id="${id}" viewBox="${a.viewBox.join(' ')}" overflow="visible">${a.inner}</symbol>`;
 
-/** Put every sprite into the page once, so <svg><use href="#coral-fan-a"/></svg> works anywhere. */
 export function injectSprites() {
   if (document.getElementById('sprites')) return;
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -463,7 +423,6 @@ export function injectSprites() {
   document.body.prepend(svg);
 }
 
-/** Draw an art piece into a canvas, `w` logical px wide (height follows the shape), `k` = pixel density. */
 export async function rasterize(art, w, k = 2) {
   const [vx, vy, vw, vh] = art.viewBox, h = w * vh / vw;
   const W = Math.ceil(w * k), H = Math.ceil(h * k);

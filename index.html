@@ -15,7 +15,6 @@
 </head>
 <body>
 
-<!-- Icon sprite: simple stroke icons, referenced with <svg class="ic"><use href="#i-name"/></svg> -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
   <symbol id="i-waves" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6q2.5-3 5 0t5 0 5 0 5 0"/><path d="M2 12q2.5-3 5 0t5 0 5 0 5 0"/><path d="M2 18q2.5-3 5 0t5 0 5 0 5 0"/></g></symbol>
   <symbol id="i-trophy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-1.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98 1.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></g></symbol>
@@ -42,9 +41,7 @@
 </defs></svg>
 
 <noscript><p style="padding:24px;color:#fff;font-family:sans-serif">Fish Dodge needs JavaScript to run.</p></noscript>
-<!-- The fish, corals, hearts and rocks are drawn from code by js/art.js and added to the page at start-up. -->
 
-<!-- ══════════════════════ 0  LOADING ══════════════════════ -->
 <section id="splash" class="screen active"><div class="stack" style="gap:20px">
   <svg class="fish-big"><use href="#fish"/></svg>
   <h1 class="title" style="font-size:clamp(2rem,5vw,3rem)">Fish Dodge</h1>
@@ -52,7 +49,6 @@
   <div style="font-weight:600;color:#e0f2fe">Filling the ocean…</div>
 </div></section>
 
-<!-- ══════════════════════ 1  LOGIN ══════════════════════ -->
 <section id="login" class="screen scene"><div class="stack auth-stack">
   <div class="brand-hero">
     <h1 class="logo-wrap"><img class="logo-img" src="assets/logo.webp" alt="Fish Dodge: Count to Survive" width="462" height="265"></h1>
@@ -76,7 +72,6 @@
   <div class="chips"><span><svg class="ic" aria-hidden="true"><use href="#i-waves"/></svg> 10 levels</span><span><svg class="ic" aria-hidden="true"><use href="#heart"/></svg> 3 lives</span><span><svg class="ic fish" aria-hidden="true"><use href="#fish"/></svg> Fish count revive</span></div>
 </div></section>
 
-<!-- ══════════════════════ 2  REGISTER ══════════════════════ -->
 <section id="register" class="screen scene"><div class="stack auth-stack">
   <div class="brand-hero">
     <img class="logo-img sm" src="assets/logo.webp" alt="Fish Dodge" width="462" height="265">
@@ -104,7 +99,6 @@
   </form>
 </div></section>
 
-<!-- ══════════════════════ 3  MAIN MENU ══════════════════════ -->
 <section id="menu" class="screen scene" data-nav="menu">
   <div class="stack hero">
     <div class="pill-tag"><i></i><span id="m-welcome">Welcome!</span></div>
@@ -123,7 +117,7 @@
         <div class="stat t-green"><i><svg class="ic" aria-hidden="true"><use href="#i-gamepad"/></svg></i>Games<b id="m-games">0</b></div>
       </div>
     </div>
-    <!-- Dev mode panel (Shift+D to toggle) -->
+  
     <div id="dev-level-select" style="display:none;flex-direction:column;gap:8px;width:100%;background:rgba(0,0,0,.45);padding:14px;border-radius:16px;border:2px dashed rgba(250,204,21,.5)">
       <div style="font-weight:700;color:#facc15;text-align:center;font-size:.95rem"><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg> Dev Mode — Jump to Level</div>
       <div class="row">
@@ -134,7 +128,6 @@
   </div>
 </section>
 
-<!-- ══════════════════════ 4  LEADERBOARD (GLOBAL + PERSONAL) ══════════════════════ -->
 <section id="leaderboard" class="screen scene" data-nav="leaderboard"><div class="stack wide">
   <div class="ribbon"><span class="rib-ico"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg></span><h2>Leaderboard</h2><p>Dive into global competition and claim the underwater crown!</p></div>
 
@@ -176,7 +169,6 @@
   </div>
 </div></section>
 
-<!-- ══════════════════════ 5  HOW TO PLAY ══════════════════════ -->
 <section id="howto" class="screen scene" data-nav="howto"><div class="stack wide guide">
   <div class="guide-head">
     <div class="pill-tag"><i></i> Swim Academy · Quick Guide</div>
@@ -216,7 +208,6 @@
   <button class="btn play-btn small wide-btn" data-action="howtoBack">Got it! Let's Play</button>
 </div></section>
 
-<!-- ══════════════════════ 6  ACCOUNT ══════════════════════ -->
 <section id="account" class="screen scene" data-nav="account"><div class="stack wide">
   <div class="page-head">
     <button class="back-btn" data-action="menu" aria-label="Back to menu">←</button>
@@ -250,7 +241,6 @@
   <button class="btn white-btn narrow" data-action="menu">← Back to Menu</button>
 </div></section>
 
-<!-- ══════════════════════ PASSWORD MODAL ══════════════════════ -->
 <div id="pw-modal" class="modal-backdrop">
   <div class="modal-box card">
     <div style="text-align:center">
@@ -282,7 +272,6 @@
   </div>
 </div>
 
-<!-- ══════════════════════ 7  GAMEPLAY ══════════════════════ -->
 <section id="game" class="screen">
   <div class="hud">
     <div class="pill" id="hud-level">Level 1/10</div>
@@ -293,12 +282,12 @@
   </div>
   <div class="play">
     <canvas id="canvas"></canvas>
-    <!-- On-screen mobile touchpad controls -->
+
     <div class="touchpad">
       <button id="btn-up"   aria-label="Move up">▲</button>
       <button id="btn-down" aria-label="Move down">▼</button>
     </div>
-    <!-- Pause overlay -->
+   
     <div class="overlay" id="pause-overlay"><div class="card" style="align-items:center;text-align:center">
       <h3 style="color:var(--blue)"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg> Paused</h3>
       <button class="btn green"   data-action="resume"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Resume</button>
@@ -307,7 +296,7 @@
       <button class="btn primary" data-action="toMenu"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg> Main Menu</button>
       <button class="btn ghost"   data-action="quit">Quit to Login</button>
     </div></div>
-    <!-- Out of lives overlay -->
+   
     <div class="overlay" id="ol-overlay"><div class="card" style="align-items:center;text-align:center">
       <h3 style="color:#ef4444"><svg class="ic" aria-hidden="true"><use href="#heart"/></svg> Out of Lives!</h3>
       <div class="hearts" id="ol-hearts"></div>
@@ -322,7 +311,6 @@
   </div>
 </section>
 
-<!-- ══════════════════════ 8  FISH COUNT MINI-GAME ══════════════════════ -->
 <section id="fishcount" class="screen"><div class="stack wide">
   <div class="row" style="align-items:center;justify-content:space-between">
     <h2><svg class="ic fish" aria-hidden="true"><use href="#fish"/></svg> Count the Fish!</h2>
@@ -346,7 +334,6 @@
   </div>
 </div></section>
 
-<!-- ══════════════════════ 9–11  FEEDBACK ══════════════════════ -->
 <section id="correct" class="screen"><div class="stack">
   <h2>Correct!</h2>
   <div class="card" style="align-items:center;text-align:center">
@@ -383,7 +370,6 @@
   <button class="btn orange" data-action="tryAgain">Try Again →</button>
 </div></section>
 
-<!-- ══════════════════════ 12  LEVEL COMPLETE ══════════════════════ -->
 <section id="levelcomplete" class="screen"><div class="stack">
   <h2>Level Complete!</h2>
   <div class="card" style="align-items:center;text-align:center">
@@ -398,7 +384,6 @@
   <button class="btn ghost" data-action="toMenu"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg> Main Menu</button>
 </div></section>
 
-<!-- ══════════════════════ 13  GAME COMPLETE ══════════════════════ -->
 <section id="gamecomplete" class="screen"><div class="stack">
   <h2>Game Complete!</h2>
   <div class="card" style="align-items:center;text-align:center">

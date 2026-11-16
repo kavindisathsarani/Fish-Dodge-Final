@@ -1,9 +1,3 @@
--- ============================================================
--- Run this in Supabase: SQL Editor > New query > paste > Run
--- ============================================================
-
--- Allow authenticated users to read all profiles (needed for global leaderboard)
--- (Skip if the policy already exists)
 do $$
 begin
   if not exists (
