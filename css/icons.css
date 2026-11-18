@@ -19,7 +19,6 @@
 .ic.medal.m2 { color: #cbd5e1; }
 .ic.medal.m3 { color: #d97706; }
 
-
 .stat.t-blue .ic  { color: #0284c7; }
 .stat.t-gold .ic  { color: #f5b301; }
 .stat.t-green .ic { color: #16a34a; }
@@ -29,3 +28,11 @@
 .step .ic, .tip .ic { color: #f59e0b; }
 .panel-head .ic { color: #0284c7; }
 .acct-ico .ic { width: 1.1em; height: 1.1em; }
+
+.k .ic { width: .95em; height: .95em; vertical-align: middle; }
+.iconbtn .ic { width: 1.1em; height: 1.1em; vertical-align: middle; }
+.touchpad button .ic { width: 1em; height: 1em; vertical-align: middle; }
+.back-btn .ic { width: 1.1em; height: 1.1em; vertical-align: middle; }
+.link-card em .ic { width: 1em; height: 1em; vertical-align: middle; }
+.hint-line .ic { width: .95em; height: .95em; vertical-align: -.12em; }
+.btn .ic { vertical-align: -.17em; }

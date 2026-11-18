@@ -38,6 +38,12 @@
   <symbol id="i-help" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/></g></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3 2"/></g></symbol>
   <symbol id="i-medal" viewBox="0 0 24 24"><g fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l3 6M16 2l-3 6" fill="none"/><circle cx="12" cy="15" r="6.5"/><circle cx="12" cy="15" r="3" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1.6"/></g></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 5l-7 7 7 7"/></g></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></g></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 11l7-7 7 7"/></g></symbol>
+  <symbol id="i-arrow-down" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 13l7 7 7-7"/></g></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></g></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></g></symbol>
 </defs></svg>
 
 <noscript><p style="padding:24px;color:#fff;font-family:sans-serif">Fish Dodge needs JavaScript to run.</p></noscript>
@@ -95,7 +101,7 @@
     <ul class="hints" id="r-pass2-h"></ul>
     <p class="err" id="r-err"></p>
     <button class="btn cta">Create Account</button>
-    <button type="button" class="btn ghost" data-action="goLogin">← Back to Login</button>
+    <button type="button" class="btn ghost" data-action="goLogin"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg> Back to Login</button>
   </form>
 </div></section>
 
@@ -104,10 +110,10 @@
     <div class="pill-tag"><i></i><span id="m-welcome">Welcome!</span></div>
     <h1 class="logo-wrap"><img class="logo-img lg" src="assets/logo.webp" alt="Fish Dodge: Count to Survive" width="462" height="265"></h1>
     <button class="btn play-btn" data-action="play"><span class="tri"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></span> Play Now</button>
-    <div class="hint-line">↑ ↓ or W / S to swim &nbsp;·&nbsp; press &amp; drag on touch screens</div>
+    <div class="hint-line"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg> <svg class="ic" aria-hidden="true"><use href="#i-arrow-down"/></svg> or W / S to swim &nbsp;·&nbsp; press &amp; drag on touch screens</div>
     <div class="row menu-row">
-      <button class="btn link-card" data-action="howto"><span class="lc-ico b"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg></span><span class="lc-txt"><b>How to Play</b><small>Rules &amp; scoring</small></span><em>›</em></button>
-      <button class="btn link-card" data-action="leaderboard"><span class="lc-ico y"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg></span><span class="lc-txt"><b>Leaderboard</b><small>Global high scores</small></span><em>›</em></button>
+      <button class="btn link-card" data-action="howto"><span class="lc-ico b"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg></span><span class="lc-txt"><b>How to Play</b><small>Rules &amp; scoring</small></span><em><svg class="ic" aria-hidden="true"><use href="#i-chevron-right"/></svg></em></button>
+      <button class="btn link-card" data-action="leaderboard"><span class="lc-ico y"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg></span><span class="lc-txt"><b>Leaderboard</b><small>Global high scores</small></span><em><svg class="ic" aria-hidden="true"><use href="#i-chevron-right"/></svg></em></button>
     </div>
     <div class="card panel">
       <div class="panel-head"><span><svg class="ic" aria-hidden="true"><use href="#i-chart"/></svg></span> Your Dive Stats</div>
@@ -122,7 +128,7 @@
       <div style="font-weight:700;color:#facc15;text-align:center;font-size:.95rem"><svg class="ic" aria-hidden="true"><use href="#i-wrench"/></svg> Dev Mode — Jump to Level</div>
       <div class="row">
         <input id="dev-level-input" type="number" min="1" max="10" value="5" style="flex:1">
-        <button class="btn orange" data-action="devPlay" style="flex:none;width:auto;padding:12px 22px">Go →</button>
+        <button class="btn orange" data-action="devPlay" style="flex:none;width:auto;padding:12px 22px">Go <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
       </div>
     </div>
   </div>
@@ -165,7 +171,7 @@
 
   <div class="row cta-row">
     <button class="btn play-btn small" data-action="play"><span class="tri"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></span> Play Now</button>
-    <button class="btn white-btn" data-action="menu">← Main Menu</button>
+    <button class="btn white-btn" data-action="menu"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg> Main Menu</button>
   </div>
 </div></section>
 
@@ -178,7 +184,7 @@
   </div>
   <div class="guide-grid">
     <div class="steps">
-      <div class="step"><div class="step-ico"><span class="k">↑</span><span class="k">↓</span></div>
+      <div class="step"><div class="step-ico"><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></span><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-arrow-down"/></svg></span></div>
         <div><span class="tag">01 · Motion</span><h3>Move Your Fish</h3>
         <p>Use arrow keys or W / S. On a phone or with a mouse, <b>press and drag</b> on the water - the fish follows your finger.</p></div></div>
       <div class="step"><div class="step-ico"><svg><use href="#rock"/></svg></div>
@@ -210,7 +216,7 @@
 
 <section id="account" class="screen scene" data-nav="account"><div class="stack wide">
   <div class="page-head">
-    <button class="back-btn" data-action="menu" aria-label="Back to menu">←</button>
+    <button class="back-btn" data-action="menu" aria-label="Back to menu"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
     <div><span class="eyebrow">Diver identity</span><h2>Account Center</h2></div>
   </div>
   <div class="acct-grid">
@@ -238,7 +244,7 @@
       </div>
     </div>
   </div>
-  <button class="btn white-btn narrow" data-action="menu">← Back to Menu</button>
+  <button class="btn white-btn narrow" data-action="menu"><svg class="ic" aria-hidden="true"><use href="#i-arrow-left"/></svg> Back to Menu</button>
 </div></section>
 
 <div id="pw-modal" class="modal-backdrop">
@@ -278,20 +284,20 @@
     <div class="bar"><i id="hud-bar"></i><b id="hud-pct">0%</b></div>
     <div class="hearts" id="hud-hearts"></div>
     <div class="pill" id="hud-score">Score: 0</div>
-    <button class="iconbtn" data-action="pause" aria-label="Pause">❚❚</button>
+    <button class="iconbtn" data-action="pause" aria-label="Pause"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg></button>
   </div>
   <div class="play">
     <canvas id="canvas"></canvas>
 
     <div class="touchpad">
-      <button id="btn-up"   aria-label="Move up">▲</button>
-      <button id="btn-down" aria-label="Move down">▼</button>
+      <button id="btn-up"   aria-label="Move up"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
+      <button id="btn-down" aria-label="Move down"><svg class="ic" aria-hidden="true"><use href="#i-arrow-down"/></svg></button>
     </div>
    
     <div class="overlay" id="pause-overlay"><div class="card" style="align-items:center;text-align:center">
       <h3 style="color:var(--blue)"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg> Paused</h3>
       <button class="btn green"   data-action="resume"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Resume</button>
-      <button class="btn primary" data-action="restart">↺ Restart Level</button>
+      <button class="btn primary" data-action="restart"><svg class="ic" aria-hidden="true"><use href="#i-restart"/></svg> Restart Level</button>
       <button class="btn primary" data-action="howtoPause"><svg class="ic" aria-hidden="true"><use href="#i-book"/></svg> How to Play</button>
       <button class="btn primary" data-action="toMenu"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg> Main Menu</button>
       <button class="btn ghost"   data-action="quit">Quit to Login</button>
@@ -306,7 +312,7 @@
   </div>
   <div class="rotate"><svg class="ic" aria-hidden="true"><use href="#i-phone"/></svg> Tip: turn your phone sideways for a larger view!</div>
   <div class="controls">
-    <span class="k">↑</span><span class="k">↓</span>
+    <span class="k"><svg class="ic" aria-hidden="true"><use href="#i-arrow-up"/></svg></span><span class="k"><svg class="ic" aria-hidden="true"><use href="#i-arrow-down"/></svg></span>
     <span>Arrow keys or W / S &nbsp;·&nbsp; Touch canvas to steer &nbsp;·&nbsp; Esc / P = pause</span>
   </div>
 </section>
@@ -337,7 +343,7 @@
 <section id="correct" class="screen"><div class="stack">
   <h2>Correct!</h2>
   <div class="card" style="align-items:center;text-align:center">
-    <div style="font-size:3rem"><svg class="ic" aria-hidden="true"><use href="#i-star"/></svg></div>
+    <div style="font-size:3rem"><svg class="ic tone-gold" aria-hidden="true"><use href="#i-star"/></svg></div>
     <div class="lab">Points earned</div>
     <div class="big" style="color:var(--green)">+50 pts</div>
     <div class="lab" style="margin-top:4px">All 3 lives restored!</div>
@@ -356,7 +362,7 @@
     <div class="lab" style="margin-top:8px">Your lives</div>
     <div class="hearts" id="in-hearts"></div>
   </div>
-  <button class="btn orange" data-action="tryAgain">Try Again →</button>
+  <button class="btn orange" data-action="tryAgain">Try Again <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
 </div></section>
 
 <section id="timeout" class="screen"><div class="stack">
@@ -367,7 +373,7 @@
     <div class="lab" style="margin-top:8px">Your lives</div>
     <div class="hearts" id="to-hearts"></div>
   </div>
-  <button class="btn orange" data-action="tryAgain">Try Again →</button>
+  <button class="btn orange" data-action="tryAgain">Try Again <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
 </div></section>
 
 <section id="levelcomplete" class="screen"><div class="stack">
@@ -380,7 +386,7 @@
     <div class="big" style="color:var(--green)" id="lc-score">+0</div>
   </div>
   <svg class="fish-big"><use href="#fish"/></svg>
-  <button class="btn primary" style="border:3px solid rgba(255,255,255,.6)" data-action="nextLevel">Next Level →</button>
+  <button class="btn primary" style="border:3px solid rgba(255,255,255,.6)" data-action="nextLevel">Next Level <svg class="ic" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
   <button class="btn ghost" data-action="toMenu"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg> Main Menu</button>
 </div></section>
 
@@ -392,7 +398,7 @@
     <div class="lab" style="margin-top:4px">Final Score</div>
     <div class="big" style="color:var(--blue);font-size:2.6rem" id="gc-score">0</div>
   </div>
-  <button class="btn green"   data-action="playAgain">↺ Play Again</button>
+  <button class="btn green"   data-action="playAgain"><svg class="ic" aria-hidden="true"><use href="#i-restart"/></svg> Play Again</button>
   <button class="btn primary" data-action="leaderboard"><svg class="ic" aria-hidden="true"><use href="#i-trophy"/></svg> View Leaderboard</button>
   <button class="btn ghost"   data-action="toMenu"><svg class="ic" aria-hidden="true"><use href="#i-home"/></svg> Main Menu</button>
 </div></section>
